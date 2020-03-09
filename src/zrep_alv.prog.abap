@@ -12,18 +12,19 @@ TYPES: BEGIN OF ty_alv,
          land1 TYPE land1_gp,
          name1 TYPE name1_gp,
          name2 TYPE name2_gp,
-         ort01 TYPE ort01_gp,
-         pstlz TYPE pstlz,
+         "The new requirement requires less columns
+*         ort01 TYPE ort01_gp,
+*         pstlz TYPE pstlz,
          regio TYPE regio,
-         sortl TYPE sortl,
-         stras TYPE stras_gp,
-         telf1 TYPE telf1,
-         telfx TYPE telfx,
-         xcpdk TYPE xcpdk,
+*         sortl TYPE sortl,
+*         stras TYPE stras_gp,
+*         telf1 TYPE telf1,
+*         telfx TYPE telfx,
+*         xcpdk TYPE xcpdk,
          adrnr TYPE adrnr,
-         mcod1 TYPE mcdd1,
-         mcod2 TYPE mcdd2,
-         mcod3 TYPE mcdd3,
+*         mcod1 TYPE mcdd1,
+*         mcod2 TYPE mcdd2,
+*         mcod3 TYPE mcdd3,
        END OF ty_alv.
 
 DATA: lt_alv TYPE STANDARD TABLE OF ty_alv.
@@ -60,18 +61,18 @@ FORM process_data.
     land1
     name1
     name2
-    ort01
-    pstlz
+*    ort01
+*    pstlz
     regio
-    sortl
-    stras
-    telf1
-    telfx
-    xcpdk
+*    sortl
+*    stras
+*    telf1
+*    telfx
+*    xcpdk
     adrnr
-    mcod1
-    mcod2
-    mcod3
+*    mcod1
+*    mcod2
+*    mcod3
   UP TO 200 ROWS
   FROM
     kna1
