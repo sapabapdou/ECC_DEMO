@@ -8,28 +8,31 @@ REPORT zrep_alv.
 TABLES: kna1.
 
 TYPES: BEGIN OF ty_alv,
-         kunnr TYPE kunnr,
-         land1 TYPE land1_gp,
-         name1 TYPE name1_gp,
-         name2 TYPE name2_gp,
-         ort01 TYPE ort01_gp,
-         pstlz TYPE pstlz,
-         regio TYPE regio,
-         sortl TYPE sortl,
-         stras TYPE stras_gp,
-         telf1 TYPE telf1,
-         telfx TYPE telfx,
-         xcpdk TYPE xcpdk,
-         adrnr TYPE adrnr,
-         mcod1 TYPE mcdd1,
-         mcod2 TYPE mcdd2,
-         mcod3 TYPE mcdd3,
-         "New columns added
-         erdat TYPE kna1-erdat,
-         ernam TYPE kna1-ernam,
+         kunnr   TYPE kunnr,
+         "New order of columns
+         erdat   TYPE kna1-erdat,
+         ernam   TYPE kna1-ernam,
+         land1   TYPE land1_gp,
+         name1   TYPE name1_gp,
+         name2   TYPE name2_gp,
+         ort01   TYPE ort01_gp,
+         pstlz   TYPE pstlz,
+         regio   TYPE regio,
+         sortl   TYPE sortl,
+         stras   TYPE stras_gp,
+         telf1   TYPE telf1,
+         telfx   TYPE telfx,
+         xcpdk   TYPE xcpdk,
+         adrnr   TYPE adrnr,
+         mcod1   TYPE mcdd1,
+         mcod2   TYPE mcdd2,
+         mcod3   TYPE mcdd3,
+         "Also there's a calculated column
+         counter TYPE i,
        END OF ty_alv.
 
-DATA: lt_alv TYPE STANDARD TABLE OF ty_alv.
+DATA: lt_alv TYPE STANDARD TABLE OF ty_alv,
+      ls_alv LIKE LINE OF lt_alv.
 
 
 DATA: go_alv TYPE REF TO cl_salv_table.
@@ -58,8 +61,13 @@ START-OF-SELECTION.
 *----------------------------------------------------------------------*
 FORM process_data.
 
+  DATA: lv_counter TYPE i.
+
   SELECT
     kunnr
+    "New order of columns
+    erdat
+    ernam
     land1
     name1
     name2
@@ -75,9 +83,6 @@ FORM process_data.
     mcod1
     mcod2
     mcod3
-    "Adding new columns
-    erdat
-    ernam
   UP TO 200 ROWS
   FROM
     kna1
@@ -86,6 +91,13 @@ FORM process_data.
   WHERE
     kunnr IN so_kunnr AND
     land1 IN so_land1.
+
+  CLEAR lv_counter.
+  LOOP AT lt_alv INTO ls_alv.
+    ls_alv-counter = lv_counter.
+    MODIFY lt_alv FROM ls_alv TRANSPORTING counter.
+    lv_counter = lv_counter + 1.
+  ENDLOOP.
 
 ENDFORM.
 *&---------------------------------------------------------------------*
