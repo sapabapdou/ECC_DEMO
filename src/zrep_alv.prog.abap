@@ -24,6 +24,9 @@ TYPES: BEGIN OF ty_alv,
          mcod1 TYPE mcdd1,
          mcod2 TYPE mcdd2,
          mcod3 TYPE mcdd3,
+         "New columns added
+         erdat TYPE kna1-erdat,
+         ernam TYPE kna1-ernam,
        END OF ty_alv.
 
 DATA: lt_alv TYPE STANDARD TABLE OF ty_alv.
@@ -72,6 +75,9 @@ FORM process_data.
     mcod1
     mcod2
     mcod3
+    "Adding new columns
+    erdat
+    ernam
   UP TO 200 ROWS
   FROM
     kna1
