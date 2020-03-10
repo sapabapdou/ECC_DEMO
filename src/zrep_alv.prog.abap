@@ -8,10 +8,12 @@ REPORT zrep_alv.
 TABLES: kna1.
 
 TYPES: BEGIN OF ty_alv,
-         kunnr   TYPE kunnr,
-         land1   TYPE land1_gp,
-         name1   TYPE name1_gp,
-         name2   TYPE name2_gp,
+         kunnr      TYPE kunnr,
+         land1      TYPE land1_gp,
+         name1      TYPE name1_gp,
+         name2      TYPE name2_gp,
+         "Add calculated column into the report
+         calculated TYPE i,
        END OF ty_alv.
 
 DATA: lt_alv TYPE STANDARD TABLE OF ty_alv,
@@ -44,6 +46,8 @@ START-OF-SELECTION.
 *----------------------------------------------------------------------*
 FORM process_data.
 
+  DATA: lv_counter TYPE i.
+
   SELECT
     kunnr
     land1
@@ -57,6 +61,12 @@ FORM process_data.
   WHERE
     kunnr IN so_kunnr AND
     land1 IN so_land1.
+
+  LOOP AT lt_alv INTO ls_alv.
+    lv_counter = lv_counter + 1.
+    ls_alv-calculated = lv_counter.
+    MODIFY lt_alv FROM ls_alv TRANSPORTING calculated.
+  ENDLOOP.
 
 ENDFORM.
 *&---------------------------------------------------------------------*
