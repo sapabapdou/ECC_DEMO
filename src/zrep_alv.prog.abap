@@ -8,31 +8,14 @@ REPORT zrep_alv.
 TABLES: kna1.
 
 TYPES: BEGIN OF ty_alv,
-         kunnr TYPE kunnr,
-         land1 TYPE land1_gp,
-         name1 TYPE name1_gp,
-         name2 TYPE name2_gp,
-         "The new requirement requires less columns
-*    ort01 TYPE ort01_gp,
-*         pstlz TYPE pstlz,
-         regio TYPE regio,
-*         sortl TYPE sortl,
-*         stras TYPE stras_gp,
-*         telf1 TYPE telf1,
-*         telfx TYPE telfx,
-*         xcpdk TYPE xcpdk,
-         adrnr TYPE adrnr,
-*         mcod1 TYPE mcdd1,
-*         mcod2 TYPE mcdd2,
-*         mcod3 TYPE mcdd3,
-mcod2   TYPE mcdd2, 
-mcod3   TYPE mcdd3, 
-"Also there's a calculated column 
-counter TYPE i, 
-
+         kunnr   TYPE kunnr,
+         land1   TYPE land1_gp,
+         name1   TYPE name1_gp,
+         name2   TYPE name2_gp,
        END OF ty_alv.
 
-DATA: lt_alv TYPE STANDARD TABLE OF ty_alv.
+DATA: lt_alv TYPE STANDARD TABLE OF ty_alv,
+      ls_alv LIKE LINE OF lt_alv.
 
 
 DATA: go_alv TYPE REF TO cl_salv_table.
@@ -61,25 +44,11 @@ START-OF-SELECTION.
 *----------------------------------------------------------------------*
 FORM process_data.
 
-DATA: lv_counter TYPE i.
-
   SELECT
     kunnr
     land1
     name1
     name2
-*    ort01
-*    pstlz
-    regio
-*    sortl
-*    stras
-*    telf1
-*    telfx
-*    xcpdk
-    adrnr
-*    mcod1
-    mcod2
-    mcod3
   UP TO 200 ROWS
   FROM
     kna1
@@ -88,14 +57,6 @@ DATA: lv_counter TYPE i.
   WHERE
     kunnr IN so_kunnr AND
     land1 IN so_land1.
-
-CLEAR lv_counter. 
-LOOP AT lt_alv INTO ls_alv. 
-ls_alv-counter = lv_counter. 
-MODIFY lt_alv FROM ls_alv TRANSPORTING counter. 
-lv_counter = lv_counter   1. 
-ENDLOOP. 
-
 
 ENDFORM.
 *&---------------------------------------------------------------------*
@@ -110,12 +71,12 @@ FORM display_alv .
 
 * Data declarations
   DATA: lv_msg            TYPE string,
-        lo_msg           TYPE REF TO cx_salv_msg,
+        lo_msg            TYPE REF TO cx_salv_msg,
         lo_columns        TYPE REF TO cl_salv_columns_table,
         lo_column         TYPE REF TO cl_salv_column_table,
 * ALV reference
 *       lo_alv            TYPE REF TO cl_salv_table,
-        lo_events TYPE REF TO cl_salv_events_table,
+        lo_events         TYPE REF TO cl_salv_events_table,
         lo_functions_list TYPE REF TO cl_salv_functions_list,
         lo_salv_not_found TYPE REF TO cx_salv_not_found.
 
@@ -123,7 +84,7 @@ FORM display_alv .
       cl_salv_table=>factory(
         IMPORTING
           r_salv_table = go_alv
-      CHANGING
+        CHANGING
           t_table      = lt_alv ).
     CATCH cx_salv_msg INTO lo_msg.
       MESSAGE lo_msg TYPE 'E' DISPLAY LIKE 'E'.
