@@ -8,10 +8,10 @@ REPORT zrep_alv.
 TABLES: kna1.
 
 TYPES: BEGIN OF ty_alv,
-         kunnr   TYPE kunnr,
-         land1   TYPE land1_gp,
-         name1   TYPE name1_gp,
-         name2   TYPE name2_gp,
+         kunnr TYPE kunnr,
+         land1 TYPE land1_gp,
+         name1 TYPE name1_gp,
+         name2 TYPE name2_gp,
        END OF ty_alv.
 
 DATA: lt_alv TYPE STANDARD TABLE OF ty_alv,
@@ -114,6 +114,47 @@ FORM display_alv .
 
   lo_columns = go_alv->get_columns( ).
   lo_columns->set_optimize( ).
+
+  "The requirement is to change the names of the columns
+  TRY.
+      lo_column ?= lo_columns->get_column( 'KUNNR' ).
+      lo_column->set_visible( value  = if_salv_c_bool_sap=>true ).
+      lo_column->set_long_text( 'Column 1' ).
+      lo_column->set_medium_text( 'Column 1' ).
+      lo_column->set_short_text( 'Col. 1' ).
+    CATCH cx_salv_not_found INTO lo_salv_not_found.
+      lv_msg = lo_salv_not_found->get_text( ).
+  ENDTRY.
+
+  TRY.
+      lo_column ?= lo_columns->get_column( 'LAND1' ).
+      lo_column->set_visible( value  = if_salv_c_bool_sap=>true ).
+      lo_column->set_long_text( 'Column 2' ).
+      lo_column->set_medium_text( 'Column 2' ).
+      lo_column->set_short_text( 'Col. 2' ).
+    CATCH cx_salv_not_found INTO lo_salv_not_found.
+      lv_msg = lo_salv_not_found->get_text( ).
+  ENDTRY.
+
+  TRY.
+      lo_column ?= lo_columns->get_column( 'NAME1' ).
+      lo_column->set_visible( value  = if_salv_c_bool_sap=>true ).
+      lo_column->set_long_text( 'Column 3' ).
+      lo_column->set_medium_text( 'Column 3' ).
+      lo_column->set_short_text( 'Col. 3' ).
+    CATCH cx_salv_not_found INTO lo_salv_not_found.
+      lv_msg = lo_salv_not_found->get_text( ).
+  ENDTRY.
+
+  TRY.
+      lo_column ?= lo_columns->get_column( 'NAME2' ).
+      lo_column->set_visible( value  = if_salv_c_bool_sap=>true ).
+      lo_column->set_long_text( 'Column 4' ).
+      lo_column->set_medium_text( 'Column 4' ).
+      lo_column->set_short_text( 'Col. 4' ).
+    CATCH cx_salv_not_found INTO lo_salv_not_found.
+      lv_msg = lo_salv_not_found->get_text( ).
+  ENDTRY.
 
 * Set Layout
   DATA: lr_layout TYPE REF TO cl_salv_layout.
