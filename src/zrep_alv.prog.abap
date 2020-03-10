@@ -62,10 +62,13 @@ FORM process_data.
     kunnr IN so_kunnr AND
     land1 IN so_land1.
 
+  "The requirement changed and they need a reverse count.
+  lv_counter = lines( lt_alv ).
+
   LOOP AT lt_alv INTO ls_alv.
-    lv_counter = lv_counter + 1.
     ls_alv-calculated = lv_counter.
     MODIFY lt_alv FROM ls_alv TRANSPORTING calculated.
+    lv_counter = lv_counter - 1.
   ENDLOOP.
 
 ENDFORM.
